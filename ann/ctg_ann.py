@@ -44,8 +44,8 @@ y = y - 1
 x = normalize(x)
 y = normalize(y)
 
-batch_x_train = x.sample(frac=0.6, random_state=0)
-batch_y_train = y.sample(frac=0.6, random_state=0)
+batch_x_train = x.sample(frac=0.7, random_state=0)
+batch_y_train = y.sample(frac=0.7, random_state=0)
 batch_x_test = x.drop(batch_x_train.index)
 batch_y_test = y.drop(batch_y_train.index)
 
