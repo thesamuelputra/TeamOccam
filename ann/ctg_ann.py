@@ -1,91 +1,56 @@
 import numpy as np
 import tensorflow as tf
 import pandas as pd
-from tensorflow import keras
-from tensorflow.keras import layers
+from tensorflow.keras.utils import to_categorical
+import matplotlib.pyplot as plt
 
 n_hidden1 = 50
 n_hidden2 = 25
 n_input = 21
 n_output = 10
+number_epochs = 1000
 
-df = pd.read_excel("datasets/CTG.xls", sheet_name="Data", skiprows=[0, 2128, 2129, 2130], usecols='K:AE, AT')
-# Target = pd.read_excel("datasets/CTG.xls", sheet_name="Data", skiprows=[0, 2128, 2129, 2130], usecols='AT')
+def plot_loss(history):
+    plt.figure('loss')
+    plt.plot(history.history['loss'], label='loss')
+    plt.plot(history.history['val_loss'], label='val_loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Error')
+    plt.legend()
+    plt.grid(True)
 
+def plot_accuracy(history):
+    plt.figure('accuracy')
+    plt.plot(history.history['acc'], label='accuracy')
+    plt.plot(history.history['val_acc'], label='val_accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.grid(True)
 
-val_dataframe = df.sample(frac=0.2, random_state=1337)
-train_dataframe = df.drop(val_dataframe.index)
+x = pd.read_excel("datasets/CTG.xls", sheet_name="Data", skiprows=[0, 2128, 2129, 2130], usecols='K:AE')
+y = pd.read_excel("datasets/CTG.xls", sheet_name="Data", skiprows=[0, 2128, 2129, 2130], usecols='AR')
+y = y - 1
+# y = to_categorical(y, n_output)
 
-print("Using %d samples for training and %d for validation" % (len(train_dataframe), len(val_dataframe)))
+batch_x_train = x.sample(frac=0.7, random_state=0)
+batch_y_train = y.sample(frac=0.7, random_state=0)
+batch_x_test = x.drop(batch_x_train.index)
+batch_y_test = y.drop(batch_y_train.index)
 
-def dataframe_to_dataset(dataframe):
-    dataframe = dataframe.copy()
-    labels = dataframe.pop('NSP')
-    ds = tf.data.Dataset.from_tensor_slices((dict(dataframe), labels))
-    ds = ds.shuffle(buffer_size=len(dataframe))
-    return ds
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(n_hidden1, input_shape=(n_input,), activation='sigmoid'),
+    tf.keras.layers.Dense(n_hidden2, activation='sigmoid'),
+    tf.keras.layers.Dense(n_output, activation='softmax')
+])
 
-train_ds = dataframe_to_dataset(train_dataframe)
-val_ds = dataframe_to_dataset(val_dataframe)
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=["accuracy"])
+history = model.fit(batch_x_train, batch_y_train, epochs=number_epochs, validation_split=0.2)
 
-LB = keras.Input(shape=(1,), name="LB")
-AC = keras.Input(shape=(1,), name="AC.1")
-FM = keras.Input(shape=(1,), name="FM.1")
-UC = keras.Input(shape=(1,), name="UC.1")
-DL = keras.Input(shape=(1,), name="DL.1")
-DS = keras.Input(shape=(1,), name="DS.1")
-DP = keras.Input(shape=(1,), name="DP.1")
-ASTV = keras.Input(shape=(1,), name="ASTV")
-MSTV = keras.Input(shape=(1,), name="MSTV")
-ALTV = keras.Input(shape=(1,), name="ALTV")
-MLTV = keras.Input(shape=(1,), name="MLTV")
-Width = keras.Input(shape=(1,), name="Width")
-Min = keras.Input(shape=(1,), name="Min")
-Max = keras.Input(shape=(1,), name="Max")
-Nmax = keras.Input(shape=(1,), name="Nmax")
-Nzeros = keras.Input(shape=(1,), name="Nzeros")
-Mode = keras.Input(shape=(1,), name="Mode")
-Mean = keras.Input(shape=(1,), name="Mean")
-Median = keras.Input(shape=(1,), name="Median")
-Variance = keras.Input(shape=(1,), name="Variance")
-Tendency = keras.Input(shape=(1,), name="Tendency")
+loss, accuracy = model.evaluate(batch_x_test, batch_y_test)
 
-all_inputs = [
-    LB,
-    AC,
-    FM,
-    UC,
-    DL,
-    DS,
-    DP,
-    ASTV,
-    MSTV,
-    ALTV,
-    MLTV,
-    Width,
-    Min,
-    Max,
-    Nmax,
-    Nzeros,
-    Mode,
-    Mean,
-    Median,
-    Variance,
-    Tendency
-]
-features = layers.concatenate(all_inputs)
+print("Test result: loss ({}), accuracy ({})".format(loss, accuracy))
 
-x = layers.Dense(n_hidden1, activation="softmax")(features)
-x = layers.Dense(n_hidden2, activation="softmax")(x)
-x = layers.Dropout(0.5)(x)
-output = layers.Dense(1, activation="sigmoid")(x)
-model = keras.Model(all_inputs, output)
-model.compile("adam", "categorical_crossentropy", metrics=["accuracy"])
-print(model.summary())
-
-# `rankdir='LR'` is to make the graph horizontal.
-# keras.utils.plot_model(model, show_shapes=True, rankdir="LR")
-
-# print(train_ds.output_shapes)
-
-model.fit(train_ds, epochs=50, steps_per_epoch=10)
+plot_loss(history)
+plot_accuracy(history)
+plt.show()
