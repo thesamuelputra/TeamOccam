@@ -88,7 +88,6 @@ for train_index, test_index in kf.split(batch_x_train):
     cv_loss_scores.append(loss)
     k_fold += 1
 
-
 print("-" * 70)
 print("Average accuracy: {} ({})".format(np.mean(cv_accuracy_scores), np.std(cv_accuracy_scores)))
 #print("Average root mean square error: {}".format(np.mean(cv_rmse_scores)))

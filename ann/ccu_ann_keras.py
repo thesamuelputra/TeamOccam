@@ -106,7 +106,7 @@ for train_index, test_index in kf.split(normalized_x_train):
     loss, accuracy, rmse = model.evaluate(x_test, y_test)
     cv_accuracy_scores.append(accuracy)
     cv_rmse_scores.append(rmse)
-    
+
     k_fold += 1
 
 saved_model_path = "./saved_models/regression_model_occam.h5"
