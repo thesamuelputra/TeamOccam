@@ -81,7 +81,7 @@ for train_index, test_index in kf.split(batch_x_train):
     print("Cross fold validation - fold {}".format(k_fold))
     x_train, x_test = batch_x_train[train_index], batch_x_train[test_index]
     y_train, y_test = batch_y_train[train_index], batch_y_train[test_index]
-    history = model.fit(x_train, y_train, epochs=125, verbose=1)
+    model.fit(x_train, y_train, epochs=125, verbose=1)
     loss, accuracy = model.evaluate(x_test, y_test)
     cv_accuracy_scores.append(accuracy)
     # cv_rmse_scores.append(rmse)
@@ -90,16 +90,15 @@ for train_index, test_index in kf.split(batch_x_train):
 
 
 print("-" * 70)
-print("Average accuracy: {}".format(np.mean(cv_accuracy_scores)))
+print("Average accuracy: {} ({})".format(np.mean(cv_accuracy_scores), np.std(cv_accuracy_scores)))
 #print("Average root mean square error: {}".format(np.mean(cv_rmse_scores)))
-#loss, accuracy, rmse = model.evaluate(batch_x_test, batch_y_test)
+print("Average loss: {}".format(np.mean(cv_loss_scores)))
 
 loss, accuracy = model.evaluate(batch_x_test, batch_y_test)
 print("Test result: loss ({}), accuracy ({})".format(loss, accuracy))
 
 # `rankdir='LR'` is to make the graph horizontal.
-tf.keras.utils.plot_model(model, show_shapes=True, rankdir="LR")
-
+# tf.keras.utils.plot_model(model, show_shapes=True, rankdir="LR")
 
 plot_cv_accuracy(cv_accuracy_scores)
 plot_cv_loss(cv_loss_scores)
