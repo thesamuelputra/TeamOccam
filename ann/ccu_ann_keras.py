@@ -87,8 +87,8 @@ normalized_y_test = np.transpose(normalized_y_test)
 
 # multilayer perceptron model
 model = tf.keras.Sequential([
-    tf.keras.layers.Dense(n_hidden1, input_shape=(n_input,), activation='sigmoid'),
-    tf.keras.layers.Dense(n_hidden2, activation='sigmoid'),
+    tf.keras.layers.Dense(n_hidden1, input_shape=(n_input,), activation='tanh'),
+    tf.keras.layers.Dense(n_hidden2, activation='relu'),
     tf.keras.layers.Dense(n_output, activation='linear')
 ])
 model.compile(loss='mean_squared_error', optimizer='sgd', metrics=["accuracy", tf.keras.metrics.RootMeanSquaredError()])
@@ -114,7 +114,7 @@ model.save(saved_model_path)
 print("MODEL SAVED!!!")
 
 print("-" * 70)
-print("Average accuracy: {} ({})".format(np.mean(cv_accuracy_scores), np.std(cv_accuracy_scores)))
+print("Average accuracy: {} (+- {})".format(np.mean(cv_accuracy_scores), np.std(cv_accuracy_scores)))
 print("Average root mean square error: {}".format(np.mean(cv_rmse_scores)))
 
 predicted = model.predict(normalized_x_test)
@@ -122,7 +122,7 @@ predicted = model.predict(normalized_x_test)
 fig, ax = plt.subplots()
 ax.scatter(normalized_y_test[:,1], predicted[:,1], edgecolors=(0, 0, 0), color='red')
 ax.plot([normalized_y_test[:,1].min(), normalized_y_test[:,1].max()], [normalized_y_test[:,1].min(), normalized_y_test[:,1].max()], 'k--', lw=3)
-ax.set_xlabel('Measured (Murder per Population)')
+ax.set_xlabel('Target (Murder per Population)')
 ax.set_ylabel('Predicted (Murder per Population)')
  
 plot_cv_accuracy(cv_accuracy_scores)

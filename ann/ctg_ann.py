@@ -19,14 +19,6 @@ def normalize(df):
         result[feature_name] = (df[feature_name] - min_value) / (max_value - min_value)
     return result
 
-def plot_cv_rmse(average_rmse):
-    plt.figure('cv_rmse')
-    plt.plot(average_rmse, label='rmse')
-    plt.plot(average_rmse, 'ro')
-    plt.xlabel('folds')
-    plt.ylabel('rmse')
-    plt.legend()
-
 def plot_cv_accuracy(average_accuracy):
     plt.figure('cv_accuracy')
     plt.plot(average_accuracy, label='accuracy')
@@ -35,7 +27,6 @@ def plot_cv_accuracy(average_accuracy):
     plt.xlabel('folds')
     plt.ylabel('accuracy')
     plt.legend()
-
 
 def plot_cv_loss(average_loss):
     plt.figure('cv_loss')
@@ -49,7 +40,6 @@ def plot_cv_loss(average_loss):
 x = pd.read_excel("datasets/CTG.xls", sheet_name="Data", skiprows=[0, 2128, 2129, 2130], usecols='K:AE')
 y = pd.read_excel("datasets/CTG.xls", sheet_name="Data", skiprows=[0, 2128, 2129, 2130], usecols='AR')
 y = y - 1
-# y = to_categorical(y, n_output)
 
 x = normalize(x)
 y = normalize(y)
@@ -74,9 +64,7 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 
 k_fold = 1
 cv_accuracy_scores = []
-cv_rmse_scores = []
 cv_loss_scores = []
-
 for train_index, test_index in kf.split(batch_x_train):
     print("Cross fold validation - fold {}".format(k_fold))
     x_train, x_test = batch_x_train[train_index], batch_x_train[test_index]
@@ -84,14 +72,15 @@ for train_index, test_index in kf.split(batch_x_train):
     model.fit(x_train, y_train, epochs=125, verbose=1)
     loss, accuracy = model.evaluate(x_test, y_test)
     cv_accuracy_scores.append(accuracy)
-    # cv_rmse_scores.append(rmse)
     cv_loss_scores.append(loss)
     k_fold += 1
 
+saved_model_path = "./saved_models/classification_model_occam.h5"
+model.save(saved_model_path)
+print("MODEL SAVED!!!")
 
 print("-" * 70)
 print("Average accuracy: {} ({})".format(np.mean(cv_accuracy_scores), np.std(cv_accuracy_scores)))
-#print("Average root mean square error: {}".format(np.mean(cv_rmse_scores)))
 print("Average loss: {}".format(np.mean(cv_loss_scores)))
 
 loss, accuracy = model.evaluate(batch_x_test, batch_y_test)
