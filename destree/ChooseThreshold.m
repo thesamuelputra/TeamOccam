@@ -10,6 +10,7 @@ for i = 1:size(features,2)
 end
 disp('threshold = ');
 disp(threshold);
+
 % test for first column
 % col = features(:,2);
 % disp(getThreshold(col));
@@ -20,6 +21,7 @@ end
 function threshold = getThreshold(col)
 min_rss = max(col);
 rss = 0;
+threshold = 0;
 for i = 1:length(col)
     % split into two group by i and find the rss of each row
     r1 = col(1:i);
