@@ -1,15 +1,17 @@
-function threshold =  ChooseThreshold(features,targets)
+function [min_rss,threshold] =  ChooseAttribute(features,targets)
 % measures how “good” each attribute (i.e. feature) in the set is.
 % choose best attribute (from all of the column) and best threshold (?)
+% choose attribute = lowest rss?
 threshold = zeros(1,2);
-% size(features,2)
-for i = 1:size(features,2)
-    fprintf('Calculating column...');
+min_rss = zeros(1,2);
+%size
+for i = 1:1
+    fprintf('Calculating threshold column...');
     disp(i);
-    threshold(i) = getThreshold(features(:,i));
+    [min_rss(i), threshold(i)] = getThreshold(features(:,i));
 end
-disp('threshold = ');
-disp(threshold);
+% disp('min_rss, threshold = ');
+% disp([min_rss, threshold]);
 
 % test for first column
 % col = features(:,2);
@@ -18,7 +20,7 @@ disp(threshold);
 % GINI IMPURITY
 end
 
-function threshold = getThreshold(col)
+function [min_rss,threshold] = getThreshold(col)
 min_rss = max(col);
 rss = 0;
 threshold = 0;
