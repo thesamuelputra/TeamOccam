@@ -1,12 +1,12 @@
-function [best_attribute, best_threshold] = ChooseAttribute(features,label)
+function [best_attribute, best_threshold, attributes] = ChooseAttribute(features,label)
 % measures how “good” each attribute (i.e. feature) in the set is.
 attributes = zeros(2,2);
 for i = 1:size(features,2)
-    fprintf('Calculating threshold column...');
-    disp(i);
+%     fprintf('Calculating threshold column...');
+%     disp(i);
     [attributes(1,i), attributes(2,i)] = getThreshold(features(:,i));
 end
-best_attribute = find(attributes(1,:)==min(attributes(1,:))); % return the column
+best_attribute = find(attributes(1,:)==min(attributes(1,:)),1,'first'); % return the column index
 best_threshold = attributes(2, best_attribute);
 end
 

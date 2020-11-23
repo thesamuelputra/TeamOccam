@@ -3,7 +3,7 @@
 %label = table2array(readtable('./datasets/ccu.csv','Range','DZ:DZ'));
 
 function tree = DecisionTreeLearning(features, label, level)
-% change level to leaf nodes constraint in if condition
+disp(level);
 if level <=10
     % look at entropy at the label, not the features?
     % if all examples have the same label then return a leaf node with label = the label
@@ -30,11 +30,10 @@ if level <=10
     tree.label2 = label2;
     if (~isempty(features1))
         tree.subtree1 = DecisionTreeLearning(features1, label1, level+1);
-    end
-    if (~isempty(features2))
+    elseif (~isempty(features2))
         tree.subtree2 = DecisionTreeLearning(features2, label2, level+1);
     end
 else
-    tree = 0;
+    
 end
 end
