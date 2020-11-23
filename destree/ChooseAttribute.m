@@ -5,7 +5,7 @@ function [best_attribute,best_threshold] = ChooseAttribute(features,label)
 % best_attribute and best_threshold come from the same column?
 threshold = zeros(1,2);
 min_rss = zeros(1,2);
-for i = 1:20
+for i = 1:size(features,2)
     fprintf('Calculating threshold column...');
     disp(i);
     [min_rss(i), threshold(i)] = getThreshold(features(:,i));
