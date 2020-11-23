@@ -1,8 +1,8 @@
-function [best_attribute,best_threshold] = ChooseAttribute(features,label)
+function [best_attribute, best_threshold, min_rss, threshold] = ChooseAttribute(features,label)
 % measures how “good” each attribute (i.e. feature) in the set is.
 % choose best attribute (from all of the column) and best threshold (?)
 % choose attribute = lowest rss become root?
-% best_attribute and best_threshold come from the same column?
+% best_attribute and best_threshold might come from different same column?
 threshold = zeros(1,2);
 min_rss = zeros(1,2);
 for i = 1:size(features,2)
@@ -12,14 +12,14 @@ for i = 1:size(features,2)
 end
 best_attribute = min(min_rss);
 best_threshold = min(threshold);
-disp(find(min(min_rss)));
-disp(find(min(threshold)));
+disp(min_rss);
+disp(threshold);
 end
 
 function [min_rss,threshold] = getThreshold(col)
 min_rss = max(col);
 rss = 1/0;
-threshold = 1/0;
+threshold = col(1);
 for i = 1:length(col)
     % split into two group by i and find the rss of each row
     r1 = col(1:i);
