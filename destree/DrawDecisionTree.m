@@ -58,6 +58,7 @@ end
 
 
 function [tree, count] = countLeaves(tree, depth, count)
+% disp(tree);
 if isempty(tree.kids)
     tree.index = count;
     count = count + 1;
@@ -100,6 +101,6 @@ if ~isempty(tree.kids)
 else
     opText = tree.op;
     line(tree.X, tree.Y, 'marker', '.', 'markersize', 8)
-%     text(tree.X, tree.Y, opText, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'interpreter', 'none')
-    text(tree.X, tree.Y, num2str(tree.class) ,'HorizontalAlignment', 'right', 'VerticalAlignment', 'top', 'interpreter', 'none');
+    text(tree.X, tree.Y, opText, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'interpreter', 'none')
+%     text(tree.X, tree.Y, num2str(tree.class) ,'HorizontalAlignment', 'right', 'VerticalAlignment', 'top', 'interpreter', 'none');
 end

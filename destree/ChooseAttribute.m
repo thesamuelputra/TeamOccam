@@ -1,13 +1,16 @@
-function [best_attribute, best_threshold, attributes] = ChooseAttribute(features,label)
+% something is wrong with the function, attributes return the same col over
+% and over again.
+
+function [best_attribute, best_threshold, attributes] = ChooseAttribute(features)
 % measures how “good” each attribute (i.e. feature) in the set is.
 attributes = zeros(2,2);
 for i = 1:size(features,2)
-%     fprintf('Calculating threshold column...');
-%     disp(i);
     [attributes(1,i), attributes(2,i)] = getThreshold(features(:,i));
 end
 best_attribute = find(attributes(1,:)==min(attributes(1,:)),1,'first'); % return the column index
 best_threshold = attributes(2, best_attribute);
+fprintf('Best Attribute...');
+disp(best_attribute);
 end
 
 function [min_rss,threshold] = getThreshold(col)

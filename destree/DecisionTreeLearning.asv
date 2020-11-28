@@ -10,11 +10,11 @@
 % end
 
 % Change to CreateTree on completion
-% function sometimes return empty kid
 function tree = DecisionTreeLearning(features, label, headers, max_depth)
-% fprintf('Calculating tree depth...');
-% disp(max_depth);
-[best_attribute, best_threshold] = ChooseAttribute(features);
+fprintf('Calculating tree depth...');
+disp(max_depth);
+[best_attribute, best_threshold] = ChooseAttribute(features,label);
+tree = struct();
 tree.attribute = best_attribute;
 tree.threshold = best_threshold;
 tree.op = headers{tree.attribute};
