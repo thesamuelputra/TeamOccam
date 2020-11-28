@@ -22,7 +22,7 @@ for i = 1:length(col)
         rss = rss + (col(j) - mean(r1))^2;
     end
     for k = 1:length(r2)
-        rss = rss + (col(j) - mean(r2))^2;
+        rss = rss + (col(k) - mean(r2))^2;
     end
     if (rss < min_rss)
         min_rss = rss;
