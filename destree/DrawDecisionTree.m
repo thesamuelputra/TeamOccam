@@ -58,7 +58,7 @@ end
 
 
 function [tree, count] = countLeaves(tree, depth, count)
-% disp(tree);
+disp(tree);
 if isempty(tree.kids)
     tree.index = count;
     count = count + 1;

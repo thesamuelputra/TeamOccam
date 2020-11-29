@@ -12,8 +12,8 @@
 % Change to CreateTree on completion
 % function sometimes return empty kid
 function tree = DecisionTreeLearning(features, label, headers, max_depth)
-% fprintf('Calculating tree depth...');
-% disp(max_depth);
+fprintf('Calculating tree depth...');
+disp(max_depth);
 [best_attribute, best_threshold] = ChooseAttribute(features);
 tree.attribute = best_attribute;
 tree.threshold = best_threshold;
@@ -31,8 +31,8 @@ for i = 1:size(features(:,tree.attribute),1)
         label2 = [label2; label(i)];
     end
 end
-% tree.features1 = features1;
-% tree.features2 = features2;
+tree.features1 = features1;
+tree.features2 = features2;
 % tree.label1 = label1;
 % tree.label2 = label2;
 tree.kids = [];
@@ -42,10 +42,10 @@ tree = Branching(tree, 2, features, features2, label2, headers, max_depth);
 end
 
 function tree = Branching(tree, kid_index, root_features, features, label, headers, max_depth)
-min_value = 20;
+min_value = 2;
 if max_depth ~= 0
     if (~isempty(features))
-        if (size(features,1) > min_value || ~isequal(root_features, features))
+        if (size(features,1) > min_value)
             tree.kids{kid_index} = DecisionTreeLearning(features, label, headers, max_depth-1);
         else
             tree.prediction = mean(features);
