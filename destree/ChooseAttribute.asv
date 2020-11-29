@@ -19,15 +19,18 @@ function [min_rss,threshold] = getThreshold(col)
 min_rss = 1/0;
 rss = 0;
 threshold = col(1);
-rss_t_array = zeros(2, length(col) - 1);
-for i = 1:(length(col) - 1)
+rss_array = zeros(1, length(col));
+for i = 1:length(col)
     % split into two group by i and find the rss of each row
     r1 = col(1:i);
     r2 = col((i+1):length(col));
+    fprintf('Test....');
+    disp(length(r1))
+    disp(length(r2))
     for j = 1:i
         rss = rss + (col(j) - mean(r1))^2;
     end
-    for k = (i+1):length(col)
+    for k = (i+1):length(r2)
         rss = rss + (col(k) - mean(r2))^2;
     end
     if (rss < min_rss)
@@ -35,12 +38,11 @@ for i = 1:(length(col) - 1)
         % choose the row with minimum rss as the threshold
         threshold = col(i);
     end
-    rss_t_array(1, i) = rss;
-    rss_t_array(2, i) = col(i);
+    rss_array(i) = rss;
     rss = 0;
 end
-% disp(rss_t_array)
+% disp(rss_array)
 % disp(threshold)
 % disp(min_rss)
-% plot(rss_t_array(2,:), rss_t_array(1,:), 'ro');
+% plot(col, rss_array, 'ro');
 end

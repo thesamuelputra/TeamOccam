@@ -41,7 +41,7 @@ if max_depth ~= 0 && ~isempty(features)
         end
         if (~isequal(features1, features) && ~isequal(features2, features))
             features1(:,tree.attribute) = [];
-            features2(:,tree.attribute) = [];
+            features1(:,tree.attribute) = [];
             tree.kids{1} = DecisionTreeLearning(features1, label1, headers, max_depth-1);
             tree.kids{2} = DecisionTreeLearning(features2, label2, headers, max_depth-1);
         else
