@@ -1,20 +1,19 @@
-% Use this function as root on completion
-
-% function tree = DecisionTreeLearning()
 % data = readtable('./datasets/ccu.csv', 'Range', 'G:X');
 % features = table2array(data);
 % label = table2array(readtable('./datasets/ccu.csv', 'Range', 'DZ:DZ'));
 % headers = data.Properties.VariableNames;
 % max_depth = 10;
-% tree = CreateTree(features, label, headers, max_depth);
+% 
+% m = size(data,1);
+% idx = randperm(m);
+% features_train = features(1:round(m*0.80),:);
+% features_val = features(round(m*0.80)+1:end,:);
 % end
 
-% Change to CreateTree on completion
-% function sometimes return empty kid
 function tree = DecisionTreeLearning(features, label, headers, max_depth)
 % fprintf('Calculating tree depth...');
 % disp(max_depth);
-min_value = 7;
+min_value = 7; % add to parameter?
 tree.op = '';
 tree.kids = [];
 tree.prediction = length(label);
