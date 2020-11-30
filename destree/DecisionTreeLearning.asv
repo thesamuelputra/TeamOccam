@@ -6,10 +6,10 @@
 % 
 % m = round(size(features,1)*0.80);
 % idx = randperm(m);
-% features_train = features(1:m,:);
-% features_test = features(m+1:end,:);
-% label_train = label(1:m);
-% label_test = label(m:end);
+% features_train = features(1:f,:);
+% features_val = features(f+1:end,:);
+% label_train = label(1:l);
+% label_val = label(l:end);
 
 function tree = DecisionTreeLearning(features, label, headers, max_depth)
 % fprintf('Calculating tree depth...');
