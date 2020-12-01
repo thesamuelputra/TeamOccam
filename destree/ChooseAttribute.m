@@ -1,6 +1,3 @@
-% something is wrong with the function, attributes return the same col over
-% and over again.
-
 function [best_attribute, best_threshold, attributes] = ChooseAttribute(features)
 % measures how “good” each attribute (i.e. feature) in the set is.
 attributes = zeros(2,size(features,2));
