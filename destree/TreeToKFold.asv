@@ -9,14 +9,12 @@ shuffled_label = label_train(rand,:);
 start_index = 1;
 for i=1:k
     end_index = round((rowsize/k)*i);
-    ftest = shuffled_features(start_index:end_index,:);
-    ltest = shuffled_label(start_index:end_index);
-    ftrain = features_train;
-    ltrain = label_train;
-    ftrain(start_index:end_index,:) = [];
-    ltrain(start_index:end_index) = [];
+%     f = shuffled_features(start_index:end_index,:);
+%     l = shuffled_label(start_index:end_index);
+    if (i == 1) ||
+    else
     k_tree{i} = DecisionTreeLearning(ftrain, ltrain, headers, max_depth);
     cv_result(1,i) = PredictTree(k_tree{i}, ftest, ltest);
-    start_index = end_index;
+    start_index = end_index + i;
 end
 end

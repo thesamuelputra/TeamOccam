@@ -15,5 +15,4 @@ label_test = label(m:end);
 
 CALL FUNCTION
 
-k_tree = TreeToKFold(features_train, label_train, headers, max_depth);
-cv_result = CrossValidation(k_tree, features_test, label_test);
+[k_tree, cv_result] = TreeToKFold(features_train, label_train, headers, max_depth);

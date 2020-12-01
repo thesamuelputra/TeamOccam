@@ -1,29 +1,14 @@
-function cv_result = CrossValidation(k_tree, features_train, features_test)
-% label? accuracy & evaluation score?
-% return an array of prediction per fold & iteration
-cell_size = size(k_tree,2);
-cv_result = zeros(cell_size,cell_size);
-for i=1:cell_size
-    for j=1:cell_size
-        if j == i
-            features = features_test;
-        else
-            features = features_train;
-        end
-        cv_result(j,i) = PredictTree(k_tree{j}, features);
-    end
-end
-end
-
-function tree_prediction = PredictTree(tree, features)
+function rmse = PredictTree(tree, features, label)
 row_size = size(features,1);
 tree_prediction = zeros(row_size,1);
+accuracy_cell = zeros(row_size,1);
 % apply the destree to each row, get the leaf
 for i=1:row_size
     tree_prediction(i) = GetLeafValue(tree, features, i);
+    accuracy_cell(i) = (label(i) - tree_prediction(i))^2;
 end
 % only two leafs get chosen everytime
-% accuracy = sum(label(row) - predicted(row))/rowsize ^2 accuracy
+rmse = sqrt(mean(accuracy_cell));
 % use rms to get accuracy
 end
 
