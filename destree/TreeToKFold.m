@@ -1,9 +1,9 @@
-function k_tree = TreeToKFold(features, label, headers, max_depth)
+function k_tree = TreeToKFold(features_train, label, headers, max_depth)
 k = 10;
 k_tree = cell(1,k);
-rowsize = size(features,1);
+rowsize = size(features_train,1);
 rand = randperm(rowsize);
-shuffled_features = features(rand,:);
+shuffled_features = features_train(rand,:);
 shuffled_label = label(rand,:);
 start_index = 1;
 for i=1:k
