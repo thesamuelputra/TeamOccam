@@ -1,18 +1,18 @@
 %% Set up the Import Options and import the data
-optsx = spreadsheetImportOptions("NumVariables", 21);
+optsx = spreadsheetImportOptions("NumVariables", 20);
 optsy = spreadsheetImportOptions("NumVariables", 1);
 
 % Specify sheet and range
 optsx.Sheet = "Data";
-optsx.DataRange = "K3:AE2128";
-optsx.VariableNamesRange = "K2:AE2";
+optsx.DataRange = "K3:AD2128";
+optsx.VariableNamesRange = "K2:AD2";
 optsy.Sheet = "Data";
 optsy.DataRange = "AT3:AT2128";
 optsy.VariableNamesRange = "AT2";
 
 
 % Specify column names and types
-optsx.VariableTypes = ["double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double"];
+optsx.VariableTypes = ["double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double"];
 optsy.VariableTypes = "double";
 
 % Import the data
@@ -32,14 +32,19 @@ end
 %% Decision Tree Function
 array_x = table2array(x);
 array_y = table2array(y);
-
-% val_n = sum(array_y(:)==1);
-% val_s = sum(array_y(1:1)==-1);
-
+% t = sum(array_y);
+%val_n = sum(array_y(:)==1);
+%val_s = sum(array_y(:)==-1);
+% 
+% disp(t)
 % disp(val_n)
 % disp(val_s)
 
-tree = DecisionTreeLearning(array_x, array_y, x.Properties.VariableNames, 10);
+n = round(size(array_x,1)*0.80);
+array_x_train = array_x(1:n,:);
+array_y_train = array_y(1:n);
+
+tree = DecisionTreeLearning(array_x_train, array_y_train, x.Properties.VariableNames, 10);
 DrawDecisionTree(tree);
 
 function tree = DecisionTreeLearning(features, label, headers, max_depth)
@@ -48,41 +53,39 @@ function tree = DecisionTreeLearning(features, label, headers, max_depth)
 min_value = 7;
 tree.op = '';
 tree.kids = [];
-tree.prediction = length(label);
+tree.prediction = 5;
 
-if max_depth ~= 0 && ~isempty(features)
-    if (size(features,1) > min_value)
-        % may split node into 2 branch
-        [best_attribute, best_threshold] = ChooseAttribute(features, label);
-        tree.attribute = best_attribute;
-        tree.threshold = best_threshold;
-        tree.op = headers{tree.attribute};
-        features1 = [];
-        features2 = [];
-        label1 = [];
-        label2 = [];
-        for i = 1:size(features(:,tree.attribute),1)
-            if (features(i,tree.attribute) < tree.threshold)
-                features1 = [features1; features(i,:)];
-                label1 = [label1; label(i)];
-            elseif (features(i, tree.attribute) >= tree.threshold)
-                features2 = [features2; features(i,:)];
-                label2 = [label2; label(i)];
-            end
+if max_depth ~= 0 && ~isempty(features) && (size(features,1) > min_value)
+    % may split node into 2 branch
+    [best_attribute, best_threshold] = ChooseAttribute(features, label);
+    tree.attribute = best_attribute;
+    tree.threshold = best_threshold;
+    tree.op = headers{tree.attribute};
+    features1 = [];
+    features2 = [];
+    label1 = [];
+    label2 = [];
+    for i = 1:size(features(:,tree.attribute),1)
+        if (features(i,tree.attribute) < tree.threshold)
+            features1 = [features1; features(i,:)];
+            label1 = [label1; label(i)];
+        elseif (features(i, tree.attribute) >= tree.threshold)
+            features2 = [features2; features(i,:)];
+            label2 = [label2; label(i)];
         end
-        if (~isequal(features1, features) && ~isequal(features2, features))
-            features1(:,tree.attribute) = [];
-            features2(:,tree.attribute) = [];
-            tree.kids{1} = DecisionTreeLearning(features1, label1, headers, max_depth-1);
-            tree.kids{2} = DecisionTreeLearning(features2, label2, headers, max_depth-1);
-        else
-            % leaf node because data are not splitted
-            tree.prediction = mean(label);
-        end
-    else
-        % leaf node
-        tree.prediction = mean(label);
     end
+    if (~isequal(features1, features) && ~isequal(features2, features))
+        %features1(:,tree.attribute) = [];
+        %features2(:,tree.attribute) = [];
+        tree.kids{1} = DecisionTreeLearning(features1, label1, headers, max_depth-1);
+        tree.kids{2} = DecisionTreeLearning(features2, label2, headers, max_depth-1);
+    else
+        % leaf node because data are not splitted
+        tree.prediction = getMajorityValue(label);
+    end
+else
+    % leaf node
+    tree.prediction = getMajorityValue(label);
 end
 
 end
@@ -120,11 +123,11 @@ for i = 1:(length(col)-1)
     avg_weight = (col(i) + col(i+1)) / 2;
     prob_l_pos = sum(array_y(1:i) == 1);
     prob_l_neg = sum(array_y(1:i) == -1);
-    prob_l_total = sum(array_y(1:i));
+    prob_l_total = length(array_y(1:i));
     gini_l = 1 - (prob_l_pos/(prob_l_total))^2 - (prob_l_neg/(prob_l_total))^2;
-    prob_r_pos = sum(array_y(i:length(col)) == 1);
-    prob_r_neg = sum(array_y(i:length(col)) == -1);
-    prob_r_total = sum(array_y(i:length(col)));
+    prob_r_pos = sum(array_y((i+1):length(col)) == 1);
+    prob_r_neg = sum(array_y((i+1):length(col)) == -1);
+    prob_r_total = length(array_y((i+1):length(col)));
     gini_r = 1 - (prob_r_pos/(prob_r_total))^2 - (prob_r_neg/(prob_r_total))^2;
     total_gini = (prob_l_total/(prob_l_total+prob_r_total))*gini_l + (prob_r_total/(prob_l_total+prob_r_total))*gini_r;
     if (total_gini < min_gini)
@@ -133,4 +136,8 @@ for i = 1:(length(col)-1)
         threshold = avg_weight;
     end
 end
+end
+
+function hai = getMajorityValue(label)
+    hai = sum(label(:)==1) > sum(label(:)==-1);
 end
