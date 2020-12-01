@@ -6,10 +6,10 @@ for i = 1:size(features,2)
 end
 best_attribute = find(attributes(1,:)==min(attributes(1,:)),1,'first'); % return the column index
 best_threshold = attributes(2, best_attribute);
-% fprintf('Best Attribute...');
-% disp(best_attribute);
-% fprintf('Best Threshold...');
-% disp(best_threshold);
+fprintf('Best Attribute...');
+disp(best_attribute);
+fprintf('Best Threshold...');
+disp(best_threshold);
 end
 
 function [min_rss,threshold] = getThreshold(col)
