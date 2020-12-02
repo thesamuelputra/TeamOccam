@@ -20,6 +20,6 @@ disp('Cross Validation Regression Result')
 disp(cv_result)
 
 tree = DecisionTreeLearning(features_train, labels_train, headers, max_depth, classification);
-rmse = PredictTreeRegression(tree, labels_train, labels_test);
+rmse = PredictTreeRegression(tree, features_test, labels_test);
 disp(['RMSE: ' num2str(rmse)])
 DrawDecisionTree(tree)

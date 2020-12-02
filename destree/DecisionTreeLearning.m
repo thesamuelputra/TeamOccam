@@ -1,4 +1,4 @@
-function tree = DecisionTreeLearning(features, labels, headers, max_depth, classification)
+function tree = DecisionTreeLearning(features, label, headers, max_depth, classification)
 min_value = 20; % add to parameter?
 tree.op = '';
 tree.kids = [];
@@ -7,9 +7,9 @@ tree.prediction = 'not leaf node';
 if max_depth ~= 0 && ~isempty(features) && (size(features,1) > min_value)
     % may split node into 2 branch
     if classification
-        [best_attribute, best_threshold] = ChooseAttributeClassification(features, labels);
+        [best_attribute, best_threshold] = ChooseAttributeClassification(features, label);
     else
-        [best_attribute, best_threshold] = ChooseAttributeRegression(features);
+        [best_attribute, best_threshold] = ChooseAttributeRegression(features, label);
     end
     tree.attribute = best_attribute;
     tree.threshold = best_threshold;
@@ -21,10 +21,10 @@ if max_depth ~= 0 && ~isempty(features) && (size(features,1) > min_value)
     for i = 1:size(features(:,tree.attribute),1)
         if (features(i,tree.attribute) < tree.threshold)
             features1 = [features1; features(i,:)];
-            label1 = [label1; labels(i)];
+            label1 = [label1; label(i)];
         elseif (features(i, tree.attribute) >= tree.threshold)
             features2 = [features2; features(i,:)];
-            label2 = [label2; labels(i)];
+            label2 = [label2; label(i)];
         end
     end
     if (~isequal(features1, features) && ~isequal(features2, features))
@@ -36,24 +36,24 @@ if max_depth ~= 0 && ~isempty(features) && (size(features,1) > min_value)
         tree.kids{2} = DecisionTreeLearning(features2, label2, headers, max_depth-1, classification);
     else
         % leaf node because data are not splitted
-        tree.prediction = leafNode(labels, classification);
+        tree.prediction = leafNode(label, classification);
     end
 else
     % leaf node
-    tree.prediction = leafNode(labels, classification);
+    tree.prediction = leafNode(label, classification);
 end
 
 end
 
-function prediction = leafNode(labels, classification)
+function prediction = leafNode(label, classification)
     if classification
-        prediction = getMajorityValue(labels);
+        prediction = getMajorityValue(label);
     else
-        if ~isnan(mean(labels))
-            prediction = mean(labels);
+        if ~isnan(mean(label))
+            prediction = mean(label);
         else
-            disp(labels)
-            prediction = ['nan value: ' size(labels)];
+            disp(label)
+            prediction = ['nan value: ' size(label)];
         end
     end
 end
