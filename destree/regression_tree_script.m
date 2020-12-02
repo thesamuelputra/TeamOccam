@@ -1,3 +1,4 @@
+tic
 %% Import data
 data = readtable('../datasets/ccu.csv', 'Range', 'G:CY');
 
@@ -23,3 +24,5 @@ tree = DecisionTreeLearning(features_train, labels_train, headers, max_depth, cl
 rmse = PredictTreeRegression(tree, features_test, labels_test);
 disp(['RMSE: ' num2str(rmse)])
 DrawDecisionTree(tree)
+
+toc
