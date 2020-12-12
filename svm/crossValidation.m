@@ -1,4 +1,4 @@
-function cv_result = crossValidation(features_train, label_train, classification)
+function cv_result = crossValidation(features_train, label_train, classification, c, gamma)
 k = 10;
 cv_result = cell(1,k);
 rowsize = size(features_train,1);
@@ -18,10 +18,8 @@ for i=1:k
         % Typical sigma (or gamma) and c
         % 0.0001 < sigma < 10
         % 0.1 < c < 100
-        c = 1;
-        sigma = 1;
-        gamma = 1/2*(sigma)^2;
-        cv_result{i} = rbf_c(shuffled_features, shuffled_label, c, gamma);
+        % gamma = 1/2*(sigma(i))^2;
+        cv_result{i} = rbf_c(shuffled_features, shuffled_label, c(i), gamma(i));
         
     end
     start_index = end_index;

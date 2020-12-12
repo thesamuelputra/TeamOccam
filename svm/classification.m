@@ -35,3 +35,5 @@ label_c = table2array(label_c);
 %% SVM
 
 % mdlc_linear = fitcsvm(features_c, label_c, 'KernelFunction','linear', 'BoxConstraint', 1);
+c = [1,2,3,4,5,6,7,8,9,10]
+gamma = [1,2,3,4,5,6,7,8,9,10] 

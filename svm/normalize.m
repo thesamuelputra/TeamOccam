@@ -12,5 +12,4 @@ end
 
 function normalized_column = normalizeColumn(col, mean, std)
 normalized_column = (col-mean)/std;
-
 end 
