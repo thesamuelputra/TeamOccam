@@ -1,4 +1,5 @@
-function cv_result = crossValidation(features_train, label_train, classification, c, gamma)
+function cv_result = crossValidation(features_train, label_train, kernel_function, param1, param2, param3)
+% example run: cv_result = crossValidation(features_c, label_c, @rbf_c, c, gamma);
 k = 10;
 cv_result = cell(1,k);
 rowsize = size(features_train,1);
@@ -14,14 +15,15 @@ for i=1:k
     ltrain = label_train;
     ftrain(start_index:end_index,:) = [];
     ltrain(start_index:end_index,:) = [];
-    if classification
-        % Typical sigma (or gamma) and c
-        % 0.0001 < sigma < 10
-        % 0.1 < c < 100
-        % gamma = 1/2*(sigma(i))^2;
-        cv_result{i} = rbf_c(shuffled_features, shuffled_label, c(i), gamma(i));
-        
+    if exist('param3', 'var')
+        mdl = kernel_function(shuffled_features, shuffled_label, param1(i), param2(i), param3(i))
+    elseif exist('param2', 'var')  
+        mdl = kernel_function(shuffled_features, shuffled_label, param1(i), param2(i))
+    else
+        mdl = kernel_function(shuffled_features, shuffled_label, param1(i))
     end
+    accuracy = size(mdl.SupportVectors,1)/size(features_train,1);
+    cv_result{i} = accuracy;
     start_index = end_index;
 end
 end

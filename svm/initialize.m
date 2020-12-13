@@ -19,6 +19,9 @@ optsy.VariableTypes = "double";
 features_c = readtable("../datasets/CTG.xls", optsx);
 label_c = readtable("../datasets/CTG.xls", optsy);
 
+features_r = table2array(readtable('../datasets/ccu.csv', 'Range', 'G:CY'));
+label_r = table2array(readtable('../datasets/ccu.csv', 'Range', 'DZ:DZ'));
+
 
 %% Convert multi-class label_cs to binary (N = 1, SP = -1)
 for i = 1:height(label_c)
@@ -34,6 +37,5 @@ label_c = table2array(label_c);
 
 %% SVM
 
+% mdlr_linear = fitrsvm(features_r, label_r, 'KernelFunction', 'linear');
 % mdlc_linear = fitcsvm(features_c, label_c, 'KernelFunction','linear', 'BoxConstraint', 1);
-c = [1,2,3,4,5,6,7,8,9,10]
-gamma = [1,2,3,4,5,6,7,8,9,10] 
