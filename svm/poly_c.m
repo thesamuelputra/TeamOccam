@@ -1,3 +1,3 @@
-function model = poly_c(features, label, q)
-model = fitcsvm(features, label, 'KernelFunction', 'polynomial', 'PolynomialOrder', q);
+function model = poly_c(features, labels, q)
+model = fitcsvm(features, labels, 'KernelFunction', 'polynomial', 'PolynomialOrder', q);
 end
