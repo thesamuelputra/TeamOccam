@@ -22,7 +22,7 @@ for i=1:k
     else
         mdl = kernel_function(ftrain, ltrain, param1);
     end
-    cv_result{i} = mdl;
+    cv_result{i} = loss(mdl,ftest,ltest);
     start_index = end_index;
 end
 end

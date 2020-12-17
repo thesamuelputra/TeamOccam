@@ -13,6 +13,9 @@ norm_features_c = normalize(features_c);
 norm_labels_c = normalize(label_c);
 hp_tune_c = GridSearchCV(k, norm_features_c, norm_labels_c, @rbf_c, c, gamma);
 
+% model = rbf_c(norm_features_c, norm_labels_c, 0.1, 1);
+% disp(model);
+
 clear k c gamma epsilon;
 
 % to do: fix cross validation
