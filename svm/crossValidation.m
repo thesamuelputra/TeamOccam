@@ -1,29 +1,28 @@
-function cv_result = crossValidation(features_train, label_train, kernel_function, param1, param2, param3)
-% example run: cv_result = crossValidation(features_c, label_c, @rbf_c, c, gamma);
-k = 10;
+function cv_result = crossValidation(k, features, labels, kernel_function, param1, param2, param3)
+% example run: cv_result = crossValidation(k, features_c, label_c, @rbf_c, c, gamma);
+% param1 = c
+% param2 = gamma
+% param3 = epsilon
+
 cv_result = cell(1,k);
-rowsize = size(features_train,1);
-rand = randperm(rowsize);
-shuffled_features = features_train(rand,:);
-shuffled_label = label_train(rand,:);
+rowsize = size(features,1);
 start_index = 1;
 for i=1:k
     end_index = round((rowsize/k)*i);
-    ftest = shuffled_features(start_index:end_index,:);
-    ltest = shuffled_label(start_index:end_index,1);
-    ftrain = features_train;
-    ltrain = label_train;
+    ftest = features(start_index:end_index,:);
+    ltest = labels(start_index:end_index,1);
+    ftrain = features;
+    ltrain = labels;
     ftrain(start_index:end_index,:) = [];
     ltrain(start_index:end_index,:) = [];
     if exist('param3', 'var')
-        mdl = kernel_function(shuffled_features, shuffled_label, param1(i), param2(i), param3(i))
+        mdl = kernel_function(ftrain, ltrain, param1, param2, param3);
     elseif exist('param2', 'var')  
-        mdl = kernel_function(shuffled_features, shuffled_label, param1(i), param2(i))
+        mdl = kernel_function(ftrain, ltrain, param1, param2);
     else
-        mdl = kernel_function(shuffled_features, shuffled_label, param1(i))
+        mdl = kernel_function(ftrain, ltrain, param1);
     end
-    accuracy = size(mdl.SupportVectors,1)/size(features_train,1);
-    cv_result{i} = accuracy;
+    cv_result{i} = mdl;
     start_index = end_index;
 end
 end

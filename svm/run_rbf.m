@@ -1,20 +1,18 @@
-k = 10
+k = 10;
 
-rbf = table('Size', [0 2], 'VariableNames', {'Regression', 'Classification'}, 'VariableTypes', {'double', 'double'});
+% rbf = table('Size', [0 4], 'VariableNames', {'Num Of SV Regression', 'SV % Regression', 'Num Of SV Classification', 'SV % Classification'}, 'VariableTypes', {'double', 'double', 'double', 'double'});
 % Typical sigma (or gamma) and c
 % 0.0001 < sigma < 10
 % 0.1 < c < 100
 % gamma = 1/2*(sigma(i))^2;
-c = [1,2,3,4,5,6,7,8,9,10];
-gamma = [1,2,3,4,5,6,7,8,9,10];
-epsilon = [3,3,3,3,3,3,3,3,3,3];
-cvr_r = crossValidation(features_r, label_r, @rbf_r, c, gamma, epsilon);
-cvr_c = crossValidation(features_c, label_c, @rbf_c, c, gamma);
+c = [0.1, 1, 10, 100, 1000];
+gamma = [1, 0.1, 0.01, 0.001, 0.0001];
+epsilon = [3,3,3,3,3];
 
-for i=1:k
-    disp(i);
-    rbf = [rbf; {cvr_r{i}, cvr_c{i}}];
-    disp(rbf);
-end
+norm_features_c = normalize(features_c);
+norm_labels_c = normalize(label_c);
+hp_tune_c = GridSearchCV(k, norm_features_c, norm_labels_c, @rbf_c, c, gamma);
 
-clear i k c gamma epsilon;
+clear k c gamma epsilon;
+
+% to do: fix cross validation
