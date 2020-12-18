@@ -36,6 +36,8 @@ features_c = table2array(features_c);
 label_c = table2array(label_c);
 
 %% SVM
-
+model1 = poly_c(normalize(features_c), normalize(label_c), 1);
+model2 = poly_c(normalize(features_c), normalize(label_c), 2);
+model3 = rbf_c(normalize(features_c), normalize(label_c), 0.1, 1);
 % mdlr_linear = fitrsvm(features_r, label_r, 'KernelFunction', 'linear');
 % mdlc_linear = fitcsvm(features_c, label_c, 'KernelFunction','linear', 'BoxConstraint', 1);
