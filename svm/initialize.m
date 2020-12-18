@@ -17,25 +17,26 @@ optsy.VariableTypes = "double";
 
 % Import the data
 features_c = readtable("../datasets/CTG.xls", optsx);
-label_c = readtable("../datasets/CTG.xls", optsy);
+labels_c = readtable("../datasets/CTG.xls", optsy);
 
 features_r = table2array(readtable('../datasets/ccu.csv', 'Range', 'G:CY'));
-label_r = table2array(readtable('../datasets/ccu.csv', 'Range', 'DZ:DZ'));
+features_r(:,25) = [];
+labels_r = table2array(readtable('../datasets/ccu.csv', 'Range', 'DZ:DZ'));
 
 
 %% Convert multi-class label_cs to binary (N = 1, SP = -1)
-for i = 1:height(label_c)
-    if  label_c.NSP(i) == 2 || label_c.NSP(i) == 3
-        label_c.NSP(i) = -1;
+for i = 1:height(labels_c)
+    if  labels_c.NSP(i) == 2 || labels_c.NSP(i) == 3
+        labels_c.NSP(i) = -1;
     end
 end
 
 %% Clear temporary variables
 clear optsx optsy i;
 features_c = table2array(features_c);
-label_c = table2array(label_c);
+labels_c = table2array(labels_c);
 
 %% SVM
 
-% mdlr_linear = fitrsvm(features_r, label_r, 'KernelFunction', 'linear');
-% mdlc_linear = fitcsvm(features_c, label_c, 'KernelFunction','linear', 'BoxConstraint', 1);
+% mdlr_linear = fitrsvm(features_r, labels_r, 'KernelFunction', 'linear');
+% mdlc_linear = fitcsvm(features_c, labels_c, 'KernelFunction','linear', 'BoxConstraint', 1);
