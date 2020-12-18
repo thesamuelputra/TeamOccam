@@ -2,9 +2,7 @@ function hp_tune_result = GridSearchCV(k_fold, features, labels, kernel_function
 % GridSearchCV for hyperparameter tuning
 
 length_param = length(param1);
-% hp_tune_result = zeros(length_param, 13); % c, gamma/poly, epsilon, cv_result
-hp_tune_result = zeros(length_param, 4);
-cv_result_array = zeros(1, k_fold);
+hp_tune_result = zeros(length_param, 5); % c, gamma/poly, epsilon, cv_result
 for i=1:length_param
     p1 = param1(i);
     hp_tune_result(i,1) = p1;
@@ -21,10 +19,8 @@ for i=1:length_param
     else
         cv_result = crossValidation(k_fold, features, labels, kernel_function, p1);
     end
-%     disp(cv_result);
-    for j=1:k_fold
-%         hp_tune_result(i,j) = cv_result{j-3}; % try to take the first one first
-        cv_result_array(1,j) = cv_result{j};
+    for j=4:5
+        hp_tune_result(i,j) = cv_result{j-3}; % try to take the first one first
     end
     hp_tune_result(i,4) = mean(cv_result_array);
 end
