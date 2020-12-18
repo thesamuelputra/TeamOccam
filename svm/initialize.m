@@ -38,6 +38,23 @@ features_c = table2array(features_c);
 labels_c = table2array(labels_c);
 
 %% SVM
+model1 = poly_c(normalize(features_c), normalize(labels_c), 1);
+model2 = poly_c(normalize(features_c), normalize(labels_c), 2);
+model4 = poly_c(normalize(features_c), normalize(labels_c), 3);
+model5 = poly_c(normalize(features_c), normalize(labels_c), 4);
+model3 = rbf_c(normalize(features_c), normalize(labels_c), 0.1, 1);
+
+for i = 2:20
+    j = 1;
+    sv = model2.SupportVectors;
+    fig = figure('Name', 'Model'+string(i));
+    gscatter(normalize(features_c(:,j)),normalize(features_c(:,i)),normalize(label_c));
+    hold on
+    plot(sv(:,j),sv(:,i),'ko','MarkerSize',10)
+    legend(string(j),string(i),'Support Vector')
+    hold off
+    saveas(fig, fullfile('C:\Users\david\Downloads\TeamOccam\svm\figures\' +string(j), 'fig'+string(j)+'-' + string(i)), 'png');
+end
 
 % mdlr_linear = fitrsvm(features_r, labels_r, 'KernelFunction', 'linear');
 % mdlc_linear = fitcsvm(features_c, labels_c, 'KernelFunction','linear', 'BoxConstraint', 1);

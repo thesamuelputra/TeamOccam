@@ -22,5 +22,6 @@ for i=1:length_param
     for j=4:5
         hp_tune_result(i,j) = cv_result{j-3}; % try to take the first one first
     end
+    hp_tune_result(i,4) = mean(cv_result_array);
 end
 
