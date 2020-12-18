@@ -43,15 +43,13 @@ model5 = poly_c(normalize(features_c), normalize(label_c), 4);
 model3 = rbf_c(normalize(features_c), normalize(label_c), 0.1, 1);
 
 for i = 2:20
-    j = 1;
     sv = model2.SupportVectors;
-    fig = figure('Name', 'Model'+string(i));
-    gscatter(normalize(features_c(:,j)),normalize(features_c(:,i)),normalize(label_c));
+    gscatter(normalize(features_c(:,1)),normalize(features_c(:,i)),normalize(label_c));
     hold on
-    plot(sv(:,j),sv(:,i),'ko','MarkerSize',10)
-    legend(string(j),string(i),'Support Vector')
+    plot(sv(:,1),sv(:,i),'ko','MarkerSize',10)
+    legend('1',string(i),'Support Vector')
     hold off
-    saveas(fig, fullfile('C:\Users\david\Downloads\TeamOccam\svm\figures\' +string(j), 'fig'+string(j)+'-' + string(i)), 'png');
+    saveas(fig, 'figure1-' + string(i) + '.png')
 end
 % mdlr_linear = fitrsvm(features_r, label_r, 'KernelFunction', 'linear');
 % mdlc_linear = fitcsvm(features_c, label_c, 'KernelFunction','linear', 'BoxConstraint', 1);
