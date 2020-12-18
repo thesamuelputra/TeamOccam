@@ -20,8 +20,9 @@ features_c = readtable("../datasets/CTG.xls", optsx);
 labels_c = readtable("../datasets/CTG.xls", optsy);
 
 features_r = table2array(readtable('../datasets/ccu.csv', 'Range', 'G:CY'));
-features_r(:,25) = [];
+features_r(2006,:) = [];
 labels_r = table2array(readtable('../datasets/ccu.csv', 'Range', 'DZ:DZ'));
+labels_r(2006,:) = [];
 
 
 %% Convert multi-class label_cs to binary (N = 1, SP = -1)
