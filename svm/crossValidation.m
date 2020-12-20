@@ -4,7 +4,7 @@ function cv_result = crossValidation(k, features, labels, kernel_function, param
 % param2 = gamma
 % param3 = epsilon
 
-cv_result = {};
+cv_result = zeros(1,k);
 rowsize = size(features,1);
 start_index = 1;
 min_loss = 1/0;
@@ -26,8 +26,7 @@ for i=1:k
     losss = loss(mdl,ftest,ltest);
     if (min_loss > losss)
         min_loss = losss;
-        cv_result{1} = size(mdl.SupportVectors,1);
-        cv_result{2} = min_loss;
+        cv_result(k) = min_loss;
     end
     start_index = end_index;
 end

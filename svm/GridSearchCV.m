@@ -20,8 +20,8 @@ for i=1:length_param
         cv_result = crossValidation(k_fold, features, labels, kernel_function, p1);
     end
     for j=4:5
-        hp_tune_result(i,j) = cv_result{j-3}; % try to take the first one first
+        hp_tune_result(i,j) = cv_result(j-3); % try to take the first one first % wrong size
     end
-    hp_tune_result(i,4) = mean(cv_result_array);
+    hp_tune_result(i,4) = mean(cv_result);
 end
 
