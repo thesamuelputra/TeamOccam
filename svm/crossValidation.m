@@ -1,4 +1,4 @@
-function cv_result = crossValidation(k, features, labels, kernel_function, param1, param2, param3)
+function [cv_result,best_mdl] = crossValidation(k, features, labels, kernel_function, param1, param2, param3)
 % example run: cv_result = crossValidation(k, features_c, label_c, @rbf_c, c, gamma);
 % param1 = c
 % param2 = gamma
@@ -27,6 +27,7 @@ for i=1:k
     if (min_loss > losss)
         min_loss = losss;
         cv_result(k) = min_loss;
+        best_mdl = mdl;
     end
     start_index = end_index;
 end
