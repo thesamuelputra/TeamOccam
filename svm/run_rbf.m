@@ -14,11 +14,17 @@ epsilon = [3,3,3,3,3];
 
 norm_features_c = normalize(features_c);
 norm_labels_c = normalize(labels_c);
-rbf_hp_tune_c = GridSearchCV(k, norm_features_c, norm_labels_c, @rbf_c, c, gamma);
+rbf_hpt_c = GridSearchCV(k, norm_features_c, norm_labels_c, @rbf_c, c, gamma);
 
 norm_features_r = normalize(features_r);
 norm_labels_r = normalize(labels_r);
-rbf_hp_tune_r = GridSearchCV(k, norm_features_r, norm_labels_r, @rbf_r, c, gamma, epsilon);
+rbf_hpt_r = GridSearchCV(k, norm_features_r, norm_labels_r, @rbf_r, c, gamma, epsilon);
+
+rbf_hpt_r{6,7} = 'RMSE';
+sum = 0;
+for i=1:5
+    rbf_hpt_r{i,7} = rmse(rbf_hpt_r{i,6}, norm_labels_r);
+end
 
 % model = rbf_c(norm_features_c, norm_labels_c, 0.1, 1);
 % disp(model);
