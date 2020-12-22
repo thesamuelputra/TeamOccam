@@ -24,7 +24,9 @@ for i=1:k
         mdl = kernel_function(ftrain, ltrain, param1);
     end
     losss = loss(mdl,ftest,ltest);
-    if (min_loss > losss)
+    if i == 1
+        best_mdl = mdl;
+    elseif (min_loss > losss)
         min_loss = losss;
         cv_result(k) = min_loss;
         best_mdl = mdl;
