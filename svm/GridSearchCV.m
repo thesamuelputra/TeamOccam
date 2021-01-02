@@ -1,7 +1,7 @@
 function hp_tune_result = gridSearchCV(k_fold, features, labels, kernel_function, param1, param2, param3)
 % GridSearchCV for hyperparameter tuning
 length_param = length(param1);
-hp_tune_result = cell(length_param, 7); % c, gamma/poly, epsilon, cv_result
+hp_tune_result = cell(length_param, 6); % c, gamma/poly, epsilon, cv_result
 hp_tune_result{6,1} = 'PARAM1';
 hp_tune_result{6,2} = 'PARAM2';
 hp_tune_result{6,3} = 'PARAM3';
