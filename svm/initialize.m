@@ -39,7 +39,7 @@ labels_c = table2array(labels_c);
 
 %% SVM
 %model1 = poly_c(normalize(features_c), normalize(labels_c), 1);
-model2 = poly_c(normalize(features_c), labels_c, 1, 2);
+% model2 = poly_c(normalize(features_c), labels_c, 1, 2);
 %model4 = poly_c(normalize(features_c), normalize(labels_c), 3);
 %model5 = poly_c(normalize(features_c), normalize(labels_c), 4);
 %model3 = rbf_c(normalize(features_c), normalize(labels_c), 0.1, 1);
@@ -60,5 +60,5 @@ for i = 1:20
 %     hold off
 %     saveas(fig, fullfile('./figures/' +string(j), 'fig'+string(j)+'-' + string(i) + '.png'));
 end
-% mdlr_linear = fitrsvm(features_r, labels_r, 'KernelFunction', 'linear');
-% mdlc_linear = fitcsvm(features_c, labels_c, 'KernelFunction','linear', 'BoxConstraint', 1);
+mdlr_linear = fitrsvm(normalize(features_r), normalize(labels_r));
+mdlc_linear = fitcsvm(normalize(features_c), normalize(labels_c), 'KernelFunction','linear', 'BoxConstraint', 1);
