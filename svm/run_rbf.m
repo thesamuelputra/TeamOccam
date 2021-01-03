@@ -18,11 +18,15 @@ norm_features_r = normalize(features_r);
 norm_labels_r = normalize(labels_r);
 rbf_hpt_r = gridSearchCV(k, norm_features_r, norm_labels_r, @rbf_r, c, gamma, epsilon);
 
-svm_rbf_fmeasure = zeros(1,5);
+rbf_hpt_c{6,7} = 'CLASSRATE';
+rbf_hpt_r{6,7} = 'RMSE';
+svm_rbf_classrate = zeros(1,5);
 svm_rbf_rmse = zeros(1,5);
 for i=1:5
-    svm_rbf_fmeasure(i) = getClassRate(rbf_hpt_c{i,6}, labels_c);
+    svm_rbf_classrate(i) = getClassRate(rbf_hpt_c{i,6}, labels_c);
     svm_rbf_rmse(i) = getRMSE(rbf_hpt_r{i,6}, norm_labels_r);
+    rbf_hpt_c{i,7} = getClassRate(rbf_hpt_c{i,6}, labels_c);
+    rbf_hpt_r{i,7} = getRMSE(rbf_hpt_r{i,6}, norm_labels_r);
 end
 
 % model = rbf_c(norm_features_c, norm_labels_c, 0.1, 1);

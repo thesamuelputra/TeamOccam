@@ -1,4 +1,4 @@
-function fmeasure = getClassRate(predicted,labels)
+function classrate = getClassRate(predicted,labels)
 tp = 0;
 fp = 0;
 fn = 0;
@@ -14,8 +14,9 @@ for i=1:size(predicted,1)
         tn = tn + 1;
     end
 end
-precision = tp/(tp + fp);
-recall = tp/(tp + fn);
-fmeasure = (2 * precision * recall)/(precision + recall);
+% precision = tp/(tp + fp);
+% recall = tp/(tp + fn);
+% fmeasure = (2 * precision * recall)/(precision + recall);
+classrate = (tp+tn) / (tp+tn+fp+fn);
 end
 
